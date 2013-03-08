@@ -7,7 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Util;
 
 import model.Knowledge;
 import model.KnowledgeMap;
@@ -120,6 +122,7 @@ public class DBReader {
 
 	private static ResultSet getResults(String query,Connection conn) {		
 	
+		query = Util.escape(query);
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -127,7 +130,7 @@ public class DBReader {
 			rs = stmt.executeQuery(query);
 
 		}catch(MySQLSyntaxErrorException me){
-			System.out.println("Error query ="+query);
+			System.out.println("Error in select query ="+query);
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -138,7 +141,11 @@ public class DBReader {
 		try {
 			Statement st = DBConnect.getConnection().createStatement();
 			st.executeUpdate(insertStatement);
-		} catch (SQLException e) {			
+		} catch(MysqlDataTruncation mde){
+			System.out.println("Data to long = "+insertStatement);
+		}
+		catch (SQLException e) {	
+			System.out.println("Error in insert/update ="+insertStatement);
 			e.printStackTrace();
 		}
 	}

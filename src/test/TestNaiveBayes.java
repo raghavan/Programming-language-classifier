@@ -1,17 +1,15 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
 
 import org.junit.Test;
 
-import dbhandler.DBConnect;
-import dbhandler.DBReader;
-
 import util.Constants;
 import util.Utility;
+import dbhandler.DBReader;
 import filehandler.FileInputReader;
 
 public class TestNaiveBayes {

@@ -14,7 +14,7 @@ public class NaiveBayes {
 
 	public static void main(String[] args) {
 
-		boolean train = true;
+		boolean train = false;
 		Set<String> stopWords = Utility.getStopWords();
 		if (train) {
 			List<File> trainingFiles = FileInputReader
