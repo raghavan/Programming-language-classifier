@@ -15,7 +15,8 @@ public class DBConnect {
 		String password = "root";
 		try {
 			Class.forName(dbDriver);
-			conn = DriverManager.getConnection(url, username, password);
+			if(conn == null)
+				conn = DriverManager.getConnection(url, username, password);
 		} catch (ClassNotFoundException cnfErr) {
 			cnfErr.printStackTrace();
 		} catch (SQLException err) {

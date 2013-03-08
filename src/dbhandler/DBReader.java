@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+
 import model.Knowledge;
 import model.KnowledgeMap;
 import util.Constants;
@@ -24,6 +26,13 @@ public class DBReader {
 				}				
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}finally{
+				try {
+					results.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return knowledge;
@@ -40,6 +49,13 @@ public class DBReader {
 				}				
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}finally{
+				try {
+					results.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return labels;
@@ -66,6 +82,13 @@ public class DBReader {
 				}				
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}finally{
+				try {
+					results.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return knowledge;
@@ -82,6 +105,13 @@ public class DBReader {
 				}				
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}finally{
+				try {
+					results.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return count;		
@@ -96,7 +126,9 @@ public class DBReader {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
 
-		} catch (SQLException e) {
+		}catch(MySQLSyntaxErrorException me){
+			System.out.println("Error query ="+query);
+		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return rs;
