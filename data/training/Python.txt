@@ -1,0 +1,111 @@
+import stream
+import stream.functions
+def test_randomStream():
+    randomStream = stream.Randoms()
+
+    previousNumbers = set()
+    for __ in xrange(1000):
+        next = randomStream.popNext()
+        assert next not in previousNumbers
+        assert isinstance(next, int)
+        previousNumbers.add(next)
+
+def test_primeStream_Values():
+    primeStream = stream.Primes()
+    for prime in PRIME_STREAM:
+        next = primeStream.popNext()
+        assert prime == next
+
+def test_primeStream_2000():
+    primeStream = stream.Primes()
+
+    for _ in xrange(2000):
+        assert primeStream.popNext() is not None
+
+def test_primeFactorStream(input, values):
+    primeFactorStream = stream.PrimeFactors(input)
+
+    primes = []
+
+    while True:
+        next = primeFactorStream.popNext()
+        if next is None:
+            break
+
+        primes.append(next)
+
+    # Verify all of the prime factors are there.
+    for prime in values:
+        assert prime in primes
+
+    # Verify the prime factors are returned only once
+    assert len(values) == len(primes)
+
+def test_highOrderStreams(inputStream, expected, isFinite):
+    for expNext in expected:
+        actNext = inputStream.popNext()
+        assert expNext == actNext
+
+    if isFinite:
+        assert inputStream.popNext() is None
+        assert inputStream.popNext() is None
+
+# ---------
+# Question!
+# Finish this test case for popN reusing HIGH_ORDER_STREAM_CASES
+def test_popN(inputStream, expected, isFinite):
+    if isFinite:
+        for exp in expected:
+            result_list = inputStream.popN(len(exp))
+            assert len(exp) == len(result_list)
+    return True
+
+def pytest_generate_tests(metafunc):
+    if metafunc.function.__name__ == test_primeFactorStream.__name__:
+        map(lambda tc: metafunc.addcall(funcargs=tc), PRIME_FACTOR_STREAM_CASES)
+
+    if metafunc.function.__name__ in (test_highOrderStreams.__name__,
+                                      test_popN.__name__):
+        map(lambda tc: metafunc.addcall(funcargs=tc), HIGH_ORDER_STREAM_CASES)
+import re, collections
+
+def words(text): return re.findall('[a-z]+', text.lower())
+
+def train(features):
+    model = collections.defaultdict(lambda: 1)
+    for f in features:
+        model[f] += 1
+    return model
+
+NWORDS = train(words(file('big.txt').read()))
+
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+def edit_level_1(word):
+    splits     = [(word[:i], word[i:]) for i in range(len(word) + 1)]
+    print splits
+
+    deletes    = [a + b[1:] for a, b in splits if b]
+    print deletes
+
+    transposes = [a + b[1] + b[0] + b[2:] for a, b in splits if len(b)>1]
+    print transposes
+
+    replaces   = [a + c + b[1:] for a, b in splits for c in alphabet if b]
+    print replaces
+
+    inserts    = [a + c + b     for a, b in splits for c in alphabet]
+    print inserts
+
+    return set(deletes + transposes + replaces + inserts)
+
+def known_edits(word):
+    return set(e2 for e1 in edit_level_1(word) for e2 in edit_level_1(e1) if e2 in NWORDS)
+
+def known(words): return set(w for w in words if w in NWORDS)
+
+def correct(word):
+    candidates = known([word]) or known(edit_level_1(word)) or known_edits(word) or [word]
+    return max(candidates, key=NWORDS.get)
+
+print edit_level_1('karrot')

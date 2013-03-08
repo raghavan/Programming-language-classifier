@@ -1,0 +1,35 @@
+#include <stdio.h>
+
+/*
+ * Permute a string from p to the end and print out each
+ * permutation starting from string_start (which never changes)
+ * Does not avoid duplicates
+ */
+void permute(char *string_start, char *p) {
+  
+  if (*(p+1) == 0) { /* End of string - just print it */
+    printf("result-->%s\n", string_start);
+  }
+  else {
+    char *swap;
+    /* Go along the string, swapping each element in turn with p */
+    for(swap = p; *swap; ++swap) {
+      char tmp = *swap;
+      *swap = *p;
+      *p = tmp;
+      printf("permute string_start --> %s ---- swap %s ----  p --> %s\n",string_start,swap,p);
+      permute(string_start, p+1);
+      *p = *swap;
+      *swap = tmp;
+    }
+  }
+}
+
+main(int argc, char **argv) {
+  char string[21];
+
+  printf("String to permute?\n");
+  scanf("%20s", string);
+  printf("Permutations of %s:\n", string);
+  permute(string, string);
+}
