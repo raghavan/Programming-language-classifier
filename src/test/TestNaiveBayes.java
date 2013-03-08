@@ -40,4 +40,10 @@ public class TestNaiveBayes {
 	public void testGetDistinctLabels(){
 		System.out.println(DBReader.getDistinctLabels());
 	}
+	
+	@Test
+	public void testGetKnowledgeMapForLabel(){
+		System.out.println(DBReader.getTotalWordsForLabel("c"));
+	}
+	
 }

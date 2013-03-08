@@ -1,1 +1,1 @@
-sudo find / .java | grep .java$ >> fileNames.txt
+sudo find / | egrep -i ".java$|.php$|.png$|.c$|.sh$|.rb$|.cpp$|.sql$|.py$" > fileNames.txt
