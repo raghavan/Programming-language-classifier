@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class KnowledgeMap {
-	private static Map<String, Integer> wordCount = new HashMap<String, Integer>();
+	private  Map<String, Integer> wordCount = new HashMap<String, Integer>();
 
-	public static Integer getWordCount(String word) {
+	public Integer getWordCount(String word) {
 		return wordCount.get(word);
 	}
 
-	public static void putWordCount(String word) {
+	public void putWordCount(String word) {
 		int count = 0;
 		if (wordCount.containsKey(word)) {
 			count = wordCount.get(word);
@@ -18,26 +18,26 @@ public class KnowledgeMap {
 		count += 1;
 		wordCount.put(word, count);
 	}
+	
+	public void addWordAndCount(String word,Integer count) {		
+		if (wordCount.containsKey(word)) {
+			count += wordCount.get(word);
+		}
+		wordCount.put(word, count);
+	}
 
-	public static void clear() {
+	public void clear() {
 		wordCount.clear();
 		wordCount = new HashMap<String, Integer>();
 	}
 
-	public static Map<String, Integer> getMap() {
+	public Map<String, Integer> getMap() {
 		return wordCount;
 	}
 
-	public static void load(Map<String, Integer> wordCountForLabel) {
-		wordCount.clear();
-		wordCount = new HashMap<String, Integer>();
-		wordCount = wordCountForLabel;
-	}
-
-	public static Integer getSize() {
+	public Integer getSize() {
 		if(wordCount != null)
-			return wordCount.size();
-		
+			return wordCount.size();		
 		return 0;
 	}	
 

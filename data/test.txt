@@ -1,0 +1,8 @@
+main(int argc, char **argv) {
+  char string[21];
+
+  printf("String to permute?\n");
+  scanf("%20s", string);
+  printf("Permutations of %s:\n", string);
+  permute(string, string);
+}

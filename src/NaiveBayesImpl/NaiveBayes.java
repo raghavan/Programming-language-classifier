@@ -14,36 +14,53 @@ public class NaiveBayes {
 
 	public static void main(String[] args) {
 
+		boolean train = false;
 		Set<String> stopWords = Utility.getStopWords();
-		List<File> trainingFiles = FileInputReader.getAllFilesInFolder(Constants.TRAINING_FOLDER);
-		for (File file : trainingFiles) {
-			String label = Utility.getLabelFromFileName(file.getName());
-			String fileContents = FileInputReader.getContent(file);
-			KnowledgeMap.clear();
-			if (fileContents != null) {
-				String[] bagOfWords = fileContents.split(" ");
-				for (String str : bagOfWords) {
-					if (!stopWords.contains(str)) {
-						KnowledgeMap.putWordCount(str);
+		if (train) {
+			List<File> trainingFiles = FileInputReader
+					.getAllFilesInFolder(Constants.TRAINING_FOLDER);
+			for (File file : trainingFiles) {
+				String label = Utility.getLabelFromFileName(file.getName());
+				String fileContents = FileInputReader.getContent(file);
+				KnowledgeMap knowledgeMap = new KnowledgeMap();
+				if (fileContents != null) {
+					String[] bagOfWords = fileContents.split(" ");
+					for (String str : bagOfWords) {
+						if (!stopWords.contains(str)) {
+							knowledgeMap.putWordCount(str);
+						}
 					}
+					Utility.persistMapToDb(knowledgeMap.getMap(), label);
 				}
-				Utility.persistMapToDb(KnowledgeMap.getMap(), label);
 			}
-		}
-
-		String testContent = FileInputReader.getContent(new File(Constants.TEST_FILE));
-		List<String> labels = DBReader.getDistinctLabels();
-		if (testContent != null) {
-			String[] bagOfTestWords = testContent.split(" ");
-			for (String label : labels) {
-				double probability = 0d;
-				KnowledgeMap.load(DBReader.getWordCountForLabel(label));
-				for (String testWord : bagOfTestWords) {
-					if(!stopWords.contains(testWord)){
-						probability *= KnowledgeMap.getWordCount(testWord) / KnowledgeMap.getSize();
+		} else {
+			String testContent = FileInputReader.getContent(new File(
+					Constants.TEST_FILE));
+			List<String> labels = DBReader.getDistinctLabels();
+			if (testContent != null) {
+				String[] bagOfTestWords = testContent.split(" ");
+				double highestCount = 0;
+				String resultLabel = null;
+				for (String label : labels) {
+					double probability = Math.log(0.00001);
+					KnowledgeMap knowledgeMap = DBReader
+							.getWordCountForLabel(label);
+					int totalWordCount = DBReader.getTotalWordsForLabel(label);
+					for (String testWord : bagOfTestWords) {
+						if (!stopWords.contains(testWord)) {
+							int wordCountRead = 1;
+							if(knowledgeMap.getWordCount(testWord) != null){
+								wordCountRead+=knowledgeMap.getWordCount(testWord);
+							}
+							probability *= Utility.logBase2(wordCountRead / totalWordCount);
+						}
+					}
+					if(probability > highestCount){
+						highestCount = probability;
+						resultLabel = new String(label);
 					}
 				}
-				System.out.println("Probability of test file being " + label + " = " + probability);
+				System.out.println("The test file is identified as "+ resultLabel.toUpperCase()+" with log likelihood of "+highestCount);
 			}
 		}
 	}

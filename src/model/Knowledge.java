@@ -5,8 +5,16 @@ public class Knowledge {
 	private Integer id;
 	private String word;
 	private int count;
-	private Label label;
+	private String label;
 	
+	
+	public Knowledge(Integer id, String word, int count, String label) {
+		super();
+		this.id = id;
+		this.word = word;
+		this.count = count;
+		this.label = label;
+	}
 	
 	public Integer getId() {
 		return id;
@@ -26,10 +34,10 @@ public class Knowledge {
 	public void setCount(int count) {
 		this.count = count;
 	}
-	public Label getLabel() {
+	public String getLabel() {
 		return label;
 	}
-	public void setLabel(Label label) {
+	public void setLabel(String label) {
 		this.label = label;
 	}
 	

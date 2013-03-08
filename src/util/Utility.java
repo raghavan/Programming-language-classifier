@@ -1,16 +1,24 @@
 package util;
 
+import java.io.File;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import model.Knowledge;
 
 import dbhandler.DBReader;
+import filehandler.FileInputReader;
 
 public class Utility {
 
 	public static Set<String> getStopWords() {
-		return null;
+		String fileContent = FileInputReader.getContent(new File(Constants.STOP_WORD_FILE));
+		Set<String> stopWords = new HashSet<String>();
+		for(String word : fileContent.split(" ")){
+			stopWords.add(word);
+		}
+		return stopWords;
 	}
 
 	public static void persistMapToDb(Map<String, Integer> map, String label) {
@@ -29,7 +37,7 @@ public class Utility {
 	}
 
 	private static String getInsertStatement(String key, Integer count, String label) {
-		String insertStmt = "insert into knowledgemodel (word,count,label) values ('" + key + "'," + count + ",'" + label
+		String insertStmt = "insert into knowledgemodel (word,count,label) values ('" + key.toLowerCase() + "'," + count + ",'" + label.toLowerCase()
 				+ "')";
 		return insertStmt;
 	}
@@ -40,7 +48,12 @@ public class Utility {
 	}
 
 	public static String getLabelFromFileName(String name) {
-		String label = name.split(".")[0];
-		return label.toUpperCase();
+		String label = name.split("\\.")[0];
+		return label.toLowerCase();
+	}
+	
+	public static int logBase2(int x)
+	{
+	    return (int) (Math.log(x) / Math.log(2));
 	}
 }
