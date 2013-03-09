@@ -132,6 +132,7 @@ public class DBReader {
 		}catch(MySQLSyntaxErrorException me){
 			System.out.println("Error in select query ="+query);
 		}catch (SQLException e) {
+			System.out.println("Error in select query ="+query);
 			e.printStackTrace();
 		}
 		return rs;

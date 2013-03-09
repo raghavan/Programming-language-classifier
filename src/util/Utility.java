@@ -55,9 +55,9 @@ public class Utility {
 		return label.toLowerCase();
 	}
 	
-	public static int logBase2(int x)
+	public static double logBase2(double x)
 	{
-	    return (int) (Math.log(x) / Math.log(2));
+	    return (double) (Math.log(x) / Math.log(2));
 	}
 	
 	private static final HashMap<String,String> sqlTokens;

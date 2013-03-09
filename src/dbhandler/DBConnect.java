@@ -4,19 +4,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import util.Constants;
+
 public class DBConnect {
 	private static DBConnect instance = null;
 	private static Connection conn;
 
 	private DBConnect() {
-		String dbDriver = "com.mysql.jdbc.Driver";
-		String url = "jdbc:mysql://localhost:3306/programclassify";
-		String username = "root";
-		String password = "root";
+
 		try {
-			Class.forName(dbDriver);
+			Class.forName(Constants.dbDriver);
 			if(conn == null)
-				conn = DriverManager.getConnection(url, username, password);
+				conn = DriverManager.getConnection(Constants.url, Constants.username, Constants.password);
 		} catch (ClassNotFoundException cnfErr) {
 			cnfErr.printStackTrace();
 		} catch (SQLException err) {

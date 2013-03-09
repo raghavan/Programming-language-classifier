@@ -1,3 +1,11 @@
+#! /bin/sh -x
 while read p; do
-  cat $p >> ${p#*.}.txt
-done < fileNames.txt
+filename=$(basename "$p")
+extension="${filename##*.}"
+filename="${filename%.*}"
+echo $extension
+if["$extension" -eq "java"]
+then
+ cat $p >> $extension.txt
+fi
+done < fileNames.sh
