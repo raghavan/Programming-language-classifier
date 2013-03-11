@@ -2,9 +2,12 @@ package model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import util.Utility;
 
 public class KnowledgeMap {
-	private  Map<String, Integer> wordCount = new HashMap<String, Integer>();
+	private Map<String, Integer> wordCount = new HashMap<String, Integer>();
 
 	public Integer getWordCount(String word) {
 		return wordCount.get(word);
@@ -18,8 +21,8 @@ public class KnowledgeMap {
 		count += 1;
 		wordCount.put(word, count);
 	}
-	
-	public void addWordAndCount(String word,Integer count) {		
+
+	public void addWordAndCount(String word, Integer count) {
 		if (wordCount.containsKey(word)) {
 			count += wordCount.get(word);
 		}
@@ -36,15 +39,29 @@ public class KnowledgeMap {
 	}
 
 	public Integer getSize() {
-		if(wordCount != null)
-			return wordCount.size();		
+		if (wordCount != null)
+			return wordCount.size();
 		return 0;
-	}	
-	
-	public void print(){
-		for(String str : wordCount.keySet()){
-			System.out.println("Word = "+str + " count = "+wordCount.get(str));
+	}
+
+	public void print() {
+		for (String str : wordCount.keySet()) {
+			System.out.println("Word = " + str + " count = " + wordCount.get(str));
 		}
+	}
+
+	public void makeKnowledgeMap(String content) {
+		Set<String> stopWords = Utility.getStopWords();
+		String[] bagOfWords = content.split(" ");
+		for (String str : bagOfWords) {
+			if (!stopWords.contains(str)) {
+				this.putWordCount(str);
+			}
+		}
+	}
+
+	public Set<String> getKeys() {
+		return wordCount.keySet();
 	}
 
 }

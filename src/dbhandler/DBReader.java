@@ -96,8 +96,8 @@ public class DBReader {
 		return knowledge;
 	}
 
-	public static int getTotalWordsForLabel(String label) {
-		String query = Constants.GET_TOTAL_COUNT+"'"+label.toLowerCase()+"'";
+	public static int getTotalCountForWord(String word) {
+		String query = Constants.GET_TOTAL_COUNT+"'"+word.toLowerCase()+"'";
 		ResultSet results = getResults(query, DBConnect.getConnection());
 		int count = 0;
 		if (results != null) {

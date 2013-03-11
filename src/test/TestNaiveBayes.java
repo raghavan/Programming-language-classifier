@@ -3,6 +3,7 @@ package test;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 
 import model.KnowledgeMap;
@@ -44,9 +45,9 @@ public class TestNaiveBayes {
 		System.out.println(DBReader.getDistinctLabels());
 	}
 	
-	@Ignore
+	@Test
 	public void testGetKnowledgeMapForLabel(){
-		System.out.println(DBReader.getTotalWordsForLabel("c"));
+		System.out.println(DBReader.getTotalCountForWord("import"));
 	}
 	
 	@Ignore
@@ -62,7 +63,8 @@ public class TestNaiveBayes {
 	@Test
 	public void testWordCountMapForLabel(){
 		KnowledgeMap knowledgeMap = DBReader.getWordCountMapForLabel("python");
-		System.out.println(knowledgeMap.getSize());
+		BigDecimal val = new BigDecimal(1/knowledgeMap.getSize());
+		System.out.println(val);
 	}
 	
 }
