@@ -13,7 +13,7 @@ import dbhandler.DBReader;
 import filehandler.FileInputReader;
 
 public class NaiveBayes {
-
+//Refer - http://www.nils-haldenwang.de/computer-science/machine-learning/how-to-apply-naive-bayes-classifiers-to-document-classification-problems
 	public static void main(String[] args) {
 
 		boolean train = false;
