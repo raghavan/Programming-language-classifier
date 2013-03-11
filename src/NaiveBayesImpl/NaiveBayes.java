@@ -14,7 +14,7 @@ public class NaiveBayes {
 
 	public static void main(String[] args) {
 
-		boolean train = true;
+		boolean train = false;
 		Set<String> stopWords = Utility.getStopWords();
 		if (train) {
 			List<File> trainingFiles = FileInputReader.getAllFilesInFolder(Constants.TRAINING_FOLDER);
@@ -28,13 +28,14 @@ public class NaiveBayes {
 						if (!stopWords.contains(str)) {
 							knowledgeMap.putWordCount(str);
 						}
-						/*if(knowledgeMap.getSize() > 3000){
-							Utility.persistMapToDb(knowledgeMap.getMap(), label);
-							knowledgeMap.clear();
-							knowledgeMap = new KnowledgeMap();
-						}*/
+						/*
+						 * if(knowledgeMap.getSize() > 3000){
+						 * Utility.persistMapToDb(knowledgeMap.getMap(), label);
+						 * knowledgeMap.clear(); knowledgeMap = new
+						 * KnowledgeMap(); }
+						 */
 					}
-					Utility.persistMapToDb(knowledgeMap.getMap(), label);					
+					Utility.persistMapToDb(knowledgeMap.getMap(), label);
 				}
 			}
 		} else {
@@ -42,30 +43,35 @@ public class NaiveBayes {
 			List<String> labels = DBReader.getDistinctLabels();
 			if (testContent != null) {
 				String[] bagOfTestWords = testContent.split(" ");
-				double highestCount = 0;
+				double highestProb = 0;
 				String resultLabel = "";
 				for (String label : labels) {
-					double probability = Math.log(0.00001);
-					KnowledgeMap knowledgeMap = DBReader.getWordCountForLabel(label);
+					double currentProbability = 0.000000000001;
+					KnowledgeMap knowledgeMap = DBReader.getWordCountMapForLabel(label);
 					int totalWordCount = DBReader.getTotalWordsForLabel(label);
 					for (String testWord : bagOfTestWords) {
 						if (!stopWords.contains(testWord)) {
-							int wordCountRead = 1;
-							if (knowledgeMap.getWordCount(testWord) != null) {
-								wordCountRead += knowledgeMap.getWordCount(testWord);
-							}
-							double val = wordCountRead / totalWordCount;	
-							probability *= Math.log(val);//Utility.logBase2(val);
-							//probability *= (wordCountRead/totalWordCount); 
+								int wordCountRead = 1;
+								if(knowledgeMap.getWordCount(testWord) != null)
+									wordCountRead += knowledgeMap.getWordCount(testWord);
+								double val = wordCountRead / totalWordCount;
+								double logvalue = Math.log(val);
+								if ((logvalue != Double.POSITIVE_INFINITY && 
+										logvalue != Double.NEGATIVE_INFINITY) &&
+										  logvalue > 0) {
+									currentProbability *= logvalue;
+								}							
 						}
 					}
-					if (probability > highestCount) {
-						highestCount = probability;
+					System.out.println(" Label " + label + " lowest count -- " + currentProbability);
+					if (currentProbability > highestProb) {
+						highestProb = currentProbability;
 						resultLabel = new String(label);
 					}
+					System.out.println("Highest count - "+highestProb+" result label ="+resultLabel);
 				}
 				System.out.println("The test file is identified as " + resultLabel.toUpperCase()
-						+ " with log likelihood of " + highestCount);
+						+ " with log likelihood of " + highestProb);
 			}
 		}
 	}

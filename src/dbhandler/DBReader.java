@@ -17,7 +17,7 @@ import util.Constants;
 
 public class DBReader {
 
-	public static KnowledgeMap getWordCountForLabel(String label) {
+	public static KnowledgeMap getWordCountMapForLabel(String label) {
 		String query = Constants.GET_RESULT_FOR_LABEL+"'"+label.toLowerCase()+"'";
 		ResultSet results = getResults(query, DBConnect.getConnection());
 		KnowledgeMap knowledge = new KnowledgeMap();

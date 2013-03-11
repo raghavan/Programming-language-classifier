@@ -3,6 +3,7 @@ package util;
 public interface Constants {
 	String TRAINING_FOLDER = "data/training/";
 	String TEST_FILE = "data/test/linkedlist.c";
+	//String TEST_FILE = "data/test/MSApp2.java";
 	String STOP_WORD_FILE = "data/stopwords.txt";
 
 	

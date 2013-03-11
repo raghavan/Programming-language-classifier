@@ -40,5 +40,11 @@ public class KnowledgeMap {
 			return wordCount.size();		
 		return 0;
 	}	
+	
+	public void print(){
+		for(String str : wordCount.keySet()){
+			System.out.println("Word = "+str + " count = "+wordCount.get(str));
+		}
+	}
 
 }
